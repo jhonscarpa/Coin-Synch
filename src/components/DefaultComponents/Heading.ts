@@ -5,6 +5,12 @@ interface IPropsHeading {
   isBold?: boolean
 }
 
+/**
+ * @param variant default = font-size: 3rem(48px) | 'secondary' = font-size: 2.5rem(40px) | 'tertiary' = font-size: 2rem(32px) | 'quaternary' = font-size: 1.5rem(24px) | 'quinary'= font-size: 1.25rem(20px)
+ * @param isBold Mudar o peso da fonte de 400 para 700
+ * @param as Você pode escolher qual o tipo de header quer usar do h1 ao h5 para cada variante o default é h2
+ */
+
 export const Heading = styled.h2<IPropsHeading>`
   font-size: 3rem;
   line-height: 116.66%;

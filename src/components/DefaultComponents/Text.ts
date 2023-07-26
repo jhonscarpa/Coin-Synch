@@ -5,7 +5,13 @@ interface IPropsText {
   isBold?: boolean
 }
 
-export const Text = styled.h2<IPropsText>`
+/**
+ * @param variant default = font-size: 1rem(16px) | 'label' = font-size: 0.875rem(14px) | 'small' = font-size: 0.75rem(12px) | 'paragraph' = font-size: 0.875rem(14px) line-height: 171%
+ * @param isBold Mudar o peso da fonte de 400 para 700
+ * @param as Você pode escolher qual o tipo de texto quer usar como por exemplo <p> ou <label> default = p
+ */
+
+export const Text = styled.p<IPropsText>`
   font-size: 1rem;
   line-height: 150%;
   font-weight: ${props => (props.isBold ? '700' : '400')};
