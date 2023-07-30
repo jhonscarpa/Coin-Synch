@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import dayjs from 'dayjs'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Mousewheel, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
@@ -10,14 +11,52 @@ import {
 } from './styles'
 import { coinApi } from '@/api/coinApi'
 
+const assets = ['BIT', 'DOG', 'ETH', 'SOL', 'XLM']
+
+interface IPropsResponseCryptoApi {
+  data: {
+    rate_close: number
+    rate_high: number
+    rate_low: number
+    rate_open: number
+    time_close: Date
+    time_open: Date
+    time_period_end: Date
+    time_period_start: Date
+  }[]
+}
+
 export function CryptoCarousel() {
   useEffect(() => {
-    getCryptoData()
+    getCryptoAssets()
   }, [])
 
-  async function getCryptoData() {
-    const response = await coinApi.get('/exchangerate/BTC/USD')
-    console.log(response.data)
+  async function getCryptoAssets() {
+    const startOfTheDay = dayjs(new Date()).startOf('date').format()
+    const endOfTheDay = dayjs(new Date()).endOf('date').format()
+
+    let values: {
+      asset: string
+      rate_start: number
+      rate_close: number
+    }[] = []
+
+    assets.map(async asset => {
+      const response: IPropsResponseCryptoApi = await coinApi.get(
+        `/exchangerate/${asset}/BRL/history?period_id=1HRS&time_start=${startOfTheDay}&time_end=${endOfTheDay}`,
+      )
+      console.log(response.data)
+      values = [
+        ...values,
+        {
+          asset: asset,
+          rate_start: response.data[0].rate_open,
+          rate_close: response.data[response.data.length - 1].rate_close,
+        },
+      ]
+    })
+
+    console.log('responsee:  ', values)
   }
 
   return (
